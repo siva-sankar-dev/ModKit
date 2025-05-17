@@ -7,22 +7,12 @@
 
 import Foundation
 
-public extension String {
-    
+extension String {
+
     /// Returns `true` if the string is not empty, `false` otherwise.
     /// This is an alternative to `!isEmpty`.
-    var isNotEmpty: Bool {
+    public var isNotEmpty: Bool {
         !isEmpty
-    }
-
-    /// Returns the string trimmed of leading and trailing whitespace and newline characters.
-    ///
-    /// Example:
-    /// ```
-    /// "  Hello, World!  \n".trimmed() // "Hello, World!"
-    /// ```
-    func trimmed() -> String {
-        self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     /// Returns `true` if the string contains only whitespace and newline characters, `false` otherwise.
@@ -33,14 +23,35 @@ public extension String {
     /// "Hello".isBlank   // false
     /// "".isBlank      // true (empty string is considered blank)
     /// ```
-    var isBlank: Bool {
+    public var isBlank: Bool {
         self.trimmed().isEmpty
     }
 
     /// Returns `true` if the string contains any characters that are not whitespace or newlines.
     /// This is the inverse of `isBlank`.
-    var isNotBlank: Bool {
+    public var isNotBlank: Bool {
         !self.isBlank
+    }
+
+    /// Checks if the string is a valid email format.
+    ///
+    /// Uses a regular expression to verify the standard email structure.
+    /// - Returns: `true` if the string matches the email pattern, otherwise `false`.
+    public var isValidEmail: Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailPredicate.evaluate(with: self)
+    }
+
+    /// Converts the string to a `URL` object.
+    ///
+    /// - Returns: A `URL` if the string is a valid URL format, otherwise `nil`.
+    public var url: URL? {
+        guard let url = URL(string: self), url.scheme != nil, url.host != nil
+        else {
+            return nil
+        }
+        return url
     }
 
     /// Attempts to convert the string to an `Int`.
@@ -51,7 +62,7 @@ public extension String {
     /// "123".toInt() // Optional(123)
     /// "abc".toInt() // nil
     /// ```
-    func toInt() -> Int? {
+    public func toInt() -> Int? {
         Int(self)
     }
 
@@ -63,8 +74,32 @@ public extension String {
     /// "123.45".toDouble() // Optional(123.45)
     /// "abc".toDouble()   // nil
     /// ```
-    func toDouble() -> Double? {
+    public func toDouble() -> Double? {
         Double(self)
+    }
+
+    /// Attempts to convert the string to an `Int`.
+    /// Returns an optional `Int`. If the conversion fails, it returns `nil`.
+    ///
+    /// Example:
+    /// ```
+    /// "123".toInt()
+    /// "abc".toInt() // 0
+    /// ```
+    public func toInt() -> Int {
+        Int(self) ?? 0
+    }
+
+    /// Attempts to convert the string to a `Double`.
+    /// Returns an optional `Double`. If the conversion fails, it returns `nil`.
+    ///
+    /// Example:
+    /// ```
+    /// "123.45".toDouble()
+    /// "abc".toDouble()   // 0.0
+    /// ```
+    public func toDouble() -> Double {
+        Double(self) ?? 0.0
     }
 
     /// Attempts to convert the string to a `Bool`.
@@ -80,7 +115,7 @@ public extension String {
     /// "0".toBool()     // Optional(false)
     /// "abc".toBool()   // nil
     /// ```
-    func toBool() -> Bool? {
+    public func toBool() -> Bool? {
         let lowercased = self.lowercased()
         switch lowercased {
         case "true", "yes", "1":
@@ -89,6 +124,41 @@ public extension String {
             return false
         default:
             return nil
+        }
+    }
+
+    /// Returns the string trimmed of leading and trailing whitespace and newline characters.
+    ///
+    /// Example:
+    /// ```
+    /// "  Hello, World!  \n".trimmed() // "Hello, World!"
+    /// ```
+    public func trimmed() -> String {
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// Attempts to convert the string to a `Bool`.
+    /// Recognizes "true", "yes", "1" (case-insensitive) as true.
+    /// Recognizes "false", "no", "0" (case-insensitive) as false.
+    /// Returns `nil` if the string doesn't match any of these.
+    ///
+    /// Example:
+    /// ```
+    /// "true".toBool()  // true
+    /// "FALSE".toBool() // false
+    /// "yes".toBool()   // true
+    /// "0".toBool()     // false
+    /// "abc".toBool()   // false
+    /// ```
+    public func toBool() -> Bool {
+        let lowercased = self.lowercased()
+        switch lowercased {
+        case "true", "yes", "1":
+            return true
+        case "false", "no", "0":
+            return false
+        default:
+            return false
         }
     }
 
@@ -101,11 +171,10 @@ public extension String {
     /// "WORLD".capitalizedFirst() // "WORLD" (Only the first character is considered)
     /// "".capitalizedFirst()     // ""
     /// ```
-    func capitalizingFirstLetter() -> String {
+    public func capitalizingFirstLetter() -> String {
         guard let first = first else { return "" }
         return String(first).uppercased() + dropFirst()
     }
-
 
     /// Checks if the string matches a given regular expression pattern.
     ///
@@ -117,8 +186,13 @@ public extension String {
     /// "john.doe@example.com".matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") // true
     /// "notanemail".matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")         // false
     /// ```
-    func matches(_ regex: String) -> Bool {
-        self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+    public func matches(_ regex: String) -> Bool {
+        self.range(
+            of: regex,
+            options: .regularExpression,
+            range: nil,
+            locale: nil
+        ) != nil
     }
 
     /// Returns an array of strings, splitting the string by a given separator.
@@ -132,7 +206,7 @@ public extension String {
     /// "apple,banana,orange".split(by: ",") // ["apple", "banana", "orange"]
     /// "hello".split(by: "")                // ["h", "e", "l", "l", "o"]
     /// ```
-    func split(by separator: String) -> [String] {
+    public func split(by separator: String) -> [String] {
         if separator.isEmpty {
             return self.map { String($0) }
         }
@@ -150,7 +224,7 @@ public extension String {
     /// "Hello World".prefix(5) // "Hello"
     /// "Hi".prefix(5)          // "Hi"
     /// ```
-    func take(_ count: Int) -> String {
+    public func take(_ count: Int) -> String {
         String(self.prefix(count))
     }
 
@@ -165,7 +239,7 @@ public extension String {
     /// "Hello World".suffix(5) // "World"
     /// "Hi".suffix(5)          // "Hi"
     /// ```
-    func takeLast(_ count: Int) -> String {
+    public func takeLast(_ count: Int) -> String {
         String(self.suffix(count))
     }
 
@@ -175,7 +249,7 @@ public extension String {
     /// ```
     /// "hello".reversedString() // "olleh"
     /// ```
-    func reversedString() -> String {
+    public func reversedString() -> String {
         String(self.reversed())
     }
 
@@ -188,7 +262,7 @@ public extension String {
     /// "abc".isNumeric   // false
     /// "".isNumeric      // false (or true depending on desired behavior for empty string, here false)
     /// ```
-    var isNumeric: Bool {
+    public var isNumeric: Bool {
         guard !self.isEmpty else { return false }
         return self.allSatisfy { $0.isNumber }
     }
@@ -202,7 +276,7 @@ public extension String {
     /// "abc1".isAlphabetic     // false
     /// "".isAlphabetic        // false
     /// ```
-    var isAlphabetic: Bool {
+    public var isAlphabetic: Bool {
         guard !self.isEmpty else { return false }
         return self.allSatisfy { $0.isLetter }
     }
@@ -215,7 +289,7 @@ public extension String {
     /// "Alpha-Numeric".isAlphaNumeric  // false (due to hyphen)
     /// "".isAlphaNumeric             // false
     /// ```
-    var isAlphanumeric: Bool {
+    public var isAlphanumeric: Bool {
         guard !self.isEmpty else { return false }
         return self.allSatisfy { $0.isLetter || $0.isNumber }
     }
@@ -232,7 +306,7 @@ public extension String {
     /// "hello".charAt(4) // Optional("o")
     /// "hello".charAt(5) // nil
     /// ```
-    func charAt(_ index: Int) -> Character? {
+    public func charAt(_ index: Int) -> Character? {
         guard index >= 0 && index < self.count else {
             return nil
         }
@@ -255,7 +329,7 @@ public extension String {
     /// "Hello, World!".substring(from: -1, to: 5) // nil (start out of bounds)
     /// "Hello, World!".substring(from: 5, to: 0)  // nil (start > end)
     /// ```
-    func substring(from start: Int, to end: Int) -> String? {
+    public func substring(from start: Int, to end: Int) -> String? {
         guard start >= 0, end >= 0, end <= self.count, start < end else {
             return nil
         }
@@ -274,7 +348,7 @@ public extension String {
     /// "Hello, World! World!".removing("World") // "Hello, ! !"
     /// "test".removing("xyz")                  // "test"
     /// ```
-    func removing(_ substring: String) -> String {
+    public func removing(_ substring: String) -> String {
         self.replacingOccurrences(of: substring, with: "")
     }
 
@@ -282,11 +356,126 @@ public extension String {
     ///
     /// - Parameter substring: The substring to search for.
     /// - Returns: `true` if the substring is found, `false` otherwise.
-    func contains(_ substring: String, caseSensitive: Bool = true) -> Bool {
+    public func contains(_ substring: String, caseSensitive: Bool = true)
+        -> Bool
+    {
         if caseSensitive {
             return self.range(of: substring) != nil
         } else {
             return self.lowercased().range(of: substring.lowercased()) != nil
         }
+    }
+
+    //MARK: - Date Formmating
+
+    /// Convert string to Date using specified format
+    /// - Parameter format: Date format (e.g., "yyyy-MM-dd")
+    /// - Returns: Date object if conversion successful, nil otherwise
+    public func toDate(withFormat format: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: self)
+    }
+
+    /// Format a date string from one format to another
+    /// - Parameters:
+    ///   - fromFormat: Source date format
+    ///   - toFormat: Target date format
+    /// - Returns: Formatted date string or nil if conversion fails
+    public func formatDate(fromFormat: String, toFormat: String) -> String? {
+        guard let date = self.toDate(withFormat: fromFormat) else {
+            return nil
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = toFormat
+        return dateFormatter.string(from: date)
+    }
+
+    /// Check if string represents a date in the past
+    /// - Parameter format: Date format to interpret the string
+    /// - Returns: Bool indicating if date is in the past
+    public func isDateInPast(withFormat format: String) -> Bool {
+        guard let date = self.toDate(withFormat: format) else {
+            return false
+        }
+        return date < Date()
+    }
+
+    /// Check if date string represents a weekend
+    /// - Parameter format: Date format
+    /// - Returns: Bool indicating whether date falls on a weekend
+    public func isWeekend(withFormat format: String) -> Bool {
+        guard let date = self.toDate(withFormat: format) else {
+            return false
+        }
+
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        return weekday == 1 || weekday == 7  // Sunday or Saturday
+    }
+
+    // MARK: - Price Formatting
+
+    /// Formats a string that contains a numeric value as a price with the specified currency
+    /// - Parameters:
+    ///   - currency: The currency to format the price with
+    ///   - displayStyle: Whether to use currency symbol or code (default is symbol)
+    ///   - useGrouping: Whether to use thousands separators
+    /// - Returns: A formatted price string with the appropriate currency symbol, or nil if the string cannot be converted to a number
+    public func formattedAsPrice(
+        in currency: Currency,
+        displayStyle: Currency.DisplayStyle = .symbol,
+        useGrouping: Bool = true
+    ) -> String? {
+        guard let value = Double(self) else {
+            return nil
+        }
+
+        return value.formattedAsPrice(
+            in: currency,
+            displayStyle: displayStyle,
+            useGrouping: useGrouping
+        )
+    }
+
+    /// Attempts to format a string as a price with a currency symbol added
+    /// This is a convenience method that doesn't require creating a Currency enum
+    /// - Parameters:
+    ///   - currencySymbol: The currency symbol to add (e.g., "$", "₹", "€")
+    ///   - isPrefix: Whether the symbol should appear before the amount (true) or after (false)
+    ///   - decimalPlaces: Number of decimal places to show (default is 2)
+    /// - Returns: A formatted price string, or nil if the string isn't a valid number
+    public func formattedAsPrice(
+        withSymbol currencySymbol: String,
+        isPrefix: Bool = true,
+        decimalPlaces: Int = 2,
+        useGrouping: Bool = true
+    ) -> String? {
+        guard let value = Double(self) else {
+            return nil
+        }
+
+        _ = Currency.custom(
+            code: "XXX",
+            symbol: currencySymbol,
+            position: isPrefix ? .prefix : .suffix
+        )
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = decimalPlaces
+        formatter.maximumFractionDigits = decimalPlaces
+        formatter.usesGroupingSeparator = useGrouping
+
+        guard
+            let formattedNumber = formatter.string(from: NSNumber(value: value))
+        else {
+            return nil
+        }
+
+        return isPrefix
+            ? "\(currencySymbol)\(formattedNumber)"
+            : "\(formattedNumber)\(currencySymbol)"
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension Double {
+extension Double {
 
     /// Returns `true` if the double is effectively zero, considering a small tolerance for floating-point comparisons.
     ///
@@ -18,10 +18,10 @@ public extension Double {
     /// 5.5.isZero      // false
     /// (-0.00000000009).isZero // true (depending on tolerance)
     /// ```
-    var isZero: Bool {
+    public var isZero: Bool {
         // It's generally better to compare floating-point numbers against a small epsilon (tolerance)
         // rather than direct equality with zero, due to potential precision issues.
-        abs(self) < Double.ulpOfOne.squareRoot() // A common tolerance
+        abs(self) < Double.ulpOfOne.squareRoot()  // A common tolerance
     }
 
     /// Returns `true` if the double is positive (greater than 0).
@@ -32,7 +32,7 @@ public extension Double {
     /// 0.0.isPositive   // false
     /// (-5.2).isPositive // false
     /// ```
-    var isPositive: Bool {
+    public var isPositive: Bool {
         self > 0.0
     }
 
@@ -44,7 +44,7 @@ public extension Double {
     /// 0.0.isNegative   // false
     /// 5.8.isNegative   // false
     /// ```
-    var isNegative: Bool {
+    public var isNegative: Bool {
         self < 0.0
     }
 
@@ -56,10 +56,10 @@ public extension Double {
     /// 5.33.absoluteValue    // 5.33
     /// 0.0.absoluteValue     // 0.0
     /// ```
-    var absoluteValue: Double {
+    public var absoluteValue: Double {
         abs(self)
     }
-    
+
     /// Rounds the double to a specified number of decimal places.
     ///
     /// - Parameter places: The number of decimal places to round to. Must be non-negative.
@@ -72,8 +72,8 @@ public extension Double {
     /// 10.0.rounded(toPlaces: 3)    // 10.0
     /// 0.129.rounded(toPlaces: 2)   // 0.13
     /// ```
-    func rounded(toPlaces places: Int) -> Double {
-        guard places >= 0 else { return self } // Or handle error
+    public func rounded(toPlaces places: Int) -> Double {
+        guard places >= 0 else { return self }  // Or handle error
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
     }
@@ -86,7 +86,7 @@ public extension Double {
     /// (-3.2).floored() // -4.0
     /// 7.0.floored()  // 7.0
     /// ```
-    func floored() -> Double {
+    public func floored() -> Double {
         floor(self)
     }
 
@@ -98,7 +98,7 @@ public extension Double {
     /// (-3.8).ceiled() // -3.0
     /// 7.0.ceiled()  // 7.0
     /// ```
-    func ceiled() -> Double {
+    public func ceiled() -> Double {
         ceil(self)
     }
 
@@ -111,11 +111,10 @@ public extension Double {
     /// (-3.0).isInteger   // true
     /// 0.0000000000001.isInteger // false (unless it's within tolerance of an integer)
     /// ```
-    var isInteger: Bool {
+    public var isInteger: Bool {
         // Compares the double with its floored value, considering a small tolerance
         abs(self - self.floored()) < Double.ulpOfOne.squareRoot()
     }
-
 
     /// Clamps the double to a given range.
     /// If the double is less than `min`, `min` is returned.
@@ -132,7 +131,7 @@ public extension Double {
     /// 15.2.clamped(to: 0.0...10.0) // 10.0
     /// (-5.0).clamped(to: 0.0...10.0) // 0.0
     /// ```
-    func clamped(to range: ClosedRange<Double>) -> Double {
+    public func clamped(to range: ClosedRange<Double>) -> Double {
         min(max(self, range.lowerBound), range.upperBound)
     }
 
@@ -144,8 +143,8 @@ public extension Double {
     /// (-2.75).fractionalPart // -0.75 (or 0.25 depending on definition, here it keeps the sign)
     /// 10.0.fractionalPart   // 0.0
     /// ```
-    var fractionalPart: Double {
-        self - trunc(self) // trunc removes the fractional part towards zero
+    public var fractionalPart: Double {
+        self - trunc(self)  // trunc removes the fractional part towards zero
     }
 
     /// Checks if the double is a "Not a Number" (NaN) value.
@@ -156,7 +155,7 @@ public extension Double {
     /// (0.0/0.0).isNotANumber  // true
     /// 5.0.isNotANumber      // false
     /// ```
-    var isNotANumber: Bool {
+    public var isNotANumber: Bool {
         self.isNaN
     }
 
@@ -168,10 +167,10 @@ public extension Double {
     /// (-Double.infinity).isInfiniteValue // true
     /// 5.0.isInfiniteValue             // false
     /// ```
-    var isInfiniteValue: Bool {
+    public var isInfiniteValue: Bool {
         self.isInfinite
     }
-    
+
     /// Converts the double to its string representation.
     ///
     /// Example:
@@ -179,7 +178,7 @@ public extension Double {
     /// 100.23.toString // "100.23"
     /// (-5.0).toString  // "-5.0"
     /// ```
-    var toString: String {
+    public var toString: String {
         String(self)
     }
 
@@ -191,7 +190,7 @@ public extension Double {
     /// (-3.9).toInt // -3
     /// 0.1.toInt  // 0
     /// ```
-    var toInt: Int {
+    public var toInt: Int {
         Int(self)
     }
 
@@ -205,10 +204,10 @@ public extension Double {
     /// 5.5.roundedToInt() // 6 (round half to even)
     /// (-3.7).roundedToInt() // -4
     /// ```
-    func roundedToInt() -> Int {
+    public func roundedToInt() -> Int {
         Int(self.rounded())
     }
-    
+
     /// Converts the double to an `CGFloat`, truncating any fractional part.
     ///
     /// Example:
@@ -217,8 +216,39 @@ public extension Double {
     /// (-3.9).toCGFloat // -3.0
     /// 0.1.toCGFloat  // 0.0
     /// ```
-    var toCGFloat: CGFloat {
+    public var toCGFloat: CGFloat {
         CGFloat(self)
     }
-}
 
+    //MARK: - Price Formatter
+
+    /// Formats a Double value as a price with the specified currency
+    /// - Parameters:
+    ///   - currency: The currency to format the price with
+    ///   - displayStyle: Whether to use currency symbol or code (default is symbol)
+    ///   - useGrouping: Whether to use thousands separators
+    /// - Returns: A formatted price string with the appropriate currency symbol
+    public func formattedAsPrice(
+        in currency: Currency,
+        displayStyle: Currency.DisplayStyle = .symbol,
+        useGrouping: Bool = true
+    ) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = currency.decimalPlaces
+        formatter.maximumFractionDigits = currency.decimalPlaces
+        formatter.usesGroupingSeparator = useGrouping
+
+        let formattedNumber =
+            formatter.string(from: NSNumber(value: self)) ?? String(self)
+        let identifier =
+            displayStyle == .symbol ? currency.symbol : currency.code
+
+        switch currency.symbolPosition {
+        case .prefix:
+            return "\(identifier)\(formattedNumber)"
+        case .suffix:
+            return "\(formattedNumber) \(identifier)"
+        }
+    }
+}

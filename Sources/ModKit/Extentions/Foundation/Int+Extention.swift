@@ -5,10 +5,9 @@
 //  Created by Siva Sankar on 16/05/25.
 //
 
-
 import Foundation
 
-public extension Int {
+extension Int {
 
     /// Returns `true` if the integer is zero, `false` otherwise.
     ///
@@ -18,7 +17,7 @@ public extension Int {
     /// 5.isZero  // false
     /// (-1).isZero // false
     /// ```
-    var isZero: Bool {
+    public var isZero: Bool {
         self == 0
     }
 
@@ -31,7 +30,7 @@ public extension Int {
     /// 0.isEven   // true
     /// (-2).isEven // true
     /// ```
-    var isEven: Bool {
+    public var isEven: Bool {
         self % 2 == 0
     }
 
@@ -44,7 +43,7 @@ public extension Int {
     /// 0.isOdd    // false
     /// (-1).isOdd  // true
     /// ```
-    var isOdd: Bool {
+    public var isOdd: Bool {
         self % 2 != 0
     }
 
@@ -56,7 +55,7 @@ public extension Int {
     /// 0.isPositive   // false
     /// (-5).isPositive // false
     /// ```
-    var isPositive: Bool {
+    public var isPositive: Bool {
         self > 0
     }
 
@@ -68,7 +67,7 @@ public extension Int {
     /// 0.isNegative   // false
     /// 5.isNegative   // false
     /// ```
-    var isNegative: Bool {
+    public var isNegative: Bool {
         self < 0
     }
 
@@ -80,7 +79,7 @@ public extension Int {
     /// 5.absoluteValue    // 5
     /// 0.absoluteValue    // 0
     /// ```
-    var absoluteValue: Int {
+    public var absoluteValue: Int {
         abs(self)
     }
 
@@ -93,7 +92,7 @@ public extension Int {
     /// 0.digits      // [0]
     /// (-456).digits // [4, 5, 6]
     /// ```
-    var digits: [Int] {
+    public var digits: [Int] {
         if self == 0 { return [0] }
         return String(abs(self)).compactMap { $0.wholeNumberValue }
     }
@@ -107,7 +106,7 @@ public extension Int {
     /// 0.digitCount      // 1
     /// (-987).digitCount // 3
     /// ```
-    var digitCount: Int {
+    public var digitCount: Int {
         if self == 0 { return 1 }
         return String(abs(self)).count
     }
@@ -128,7 +127,7 @@ public extension Int {
     /// // Iteration 1
     /// // Iteration 2
     /// ```
-    func times(_ closure: (Int) -> Void) {
+    public func times(_ closure: (Int) -> Void) {
         guard self > 0 else { return }
         for i in 0..<self {
             closure(i)
@@ -150,7 +149,7 @@ public extension Int {
     /// // Hello
     /// // Hello
     /// ```
-    func times(_ closure: () -> Void) {
+    public func times(_ closure: () -> Void) {
         guard self > 0 else { return }
         for _ in 0..<self {
             closure()
@@ -171,10 +170,10 @@ public extension Int {
     /// 0.isPrime  // false
     /// (-5).isPrime // false
     /// ```
-    var isPrime: Bool {
+    public var isPrime: Bool {
         guard self > 1 else { return false }
-        guard self > 3 else { return true } // 2 and 3 are prime
-        guard self % 2 != 0, self % 3 != 0 else { return false } // divisible by 2 or 3
+        guard self > 3 else { return true }  // 2 and 3 are prime
+        guard self % 2 != 0, self % 3 != 0 else { return false }  // divisible by 2 or 3
 
         var i = 5
         while i * i <= self {
@@ -185,8 +184,7 @@ public extension Int {
         }
         return true
     }
-    
-    
+
     /// Converts the integer to its string representation.
     /// This is an alternative to `String(self)`.
     ///
@@ -195,10 +193,10 @@ public extension Int {
     /// 100.toString // "100"
     /// (-5).toString // "-5"
     /// ```
-    var toString: String {
+    public var toString: String {
         String(self)
     }
-    
+
     /// Converts the integer to its CGFloat representation.
     /// This is an alternative to `CGFloat(self)`.
     ///
@@ -207,10 +205,10 @@ public extension Int {
     /// 100.toCGFloat // 100.0
     /// (-5).toCGFloat // -5
     /// ```
-    var toCGFloat: CGFloat {
+    public var toCGFloat: CGFloat {
         CGFloat(self)
     }
-    
+
     /// Converts the integer to its Double representation.
     /// This is an alternative to `Double(self)`.
     ///
@@ -219,7 +217,26 @@ public extension Int {
     /// 100.toDouble // 100.0
     /// (-5).toDouble // -5.0
     /// ```
-    var toDouble: CGFloat {
-        CGFloat(self)
+    public var toDouble: Double {
+        Double(self)
     }
+
+    /// Formats an Int value as a price with the specified currency
+    /// - Parameters:
+    ///   - currency: The currency to format the price with
+    ///   - displayStyle: Whether to use currency symbol or code (default is symbol)
+    ///   - useGrouping: Whether to use thousands separators
+    /// - Returns: A formatted price string with the appropriate currency symbol
+    public func formattedAsPrice(
+        in currency: Currency,
+        displayStyle: Currency.DisplayStyle = .symbol,
+        useGrouping: Bool = true
+    ) -> String {
+        return Double(self).formattedAsPrice(
+            in: currency,
+            displayStyle: displayStyle,
+            useGrouping: useGrouping
+        )
+    }
+
 }
