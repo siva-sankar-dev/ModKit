@@ -1,2 +1,2 @@
 
-// Feels lonely here 🫠
+// Feels lonely here
