@@ -29,7 +29,7 @@ Add ModKit to your project by adding it as a dependency in your `Package.swift` 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/siva-sankar-dev/ModKit.git", from: "1.0.0")
+    .package(url: "https://github.com/siva-sankar-dev/ModKit.git", from: "1.0.1")
 ]
 ```
 
