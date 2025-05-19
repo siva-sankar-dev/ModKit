@@ -1,5 +1,5 @@
 //
-//  Double+ExtentionTests.swift
+//  Double+ExtensionTests.swift
 //  ModKit
 //
 //  Created by Siva Sankar on 17/05/25.
@@ -10,7 +10,7 @@ import ModKit
 import CoreGraphics
 
 @Suite("Double Extention Tests")
-struct DoubleExtentionTests {
+struct DoubleExtensionTests {
     
        // MARK: - isZero Tests
        

@@ -1,5 +1,5 @@
 //
-//  View+Extention.swift
+//  View+Extension.swift
 //  ModKit
 //
 //  Created by Siva Sankar on 16/05/25.

@@ -1,5 +1,5 @@
 //
-//  Color+Extention.swift
+//  Color+Extension.swift
 //  ModKit
 //
 //  Created by Siva Sankar on 17/05/25.

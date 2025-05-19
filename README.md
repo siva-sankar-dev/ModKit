@@ -29,7 +29,7 @@ Add ModKit to your project by adding it as a dependency in your `Package.swift` 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/siva-sankar-dev/ModKit.git", from: "1.0.1")
+    .package(url: "https://github.com/siva-sankar-dev/ModKit.git", from: "1.0.4")
 ]
 ```
 
@@ -90,12 +90,12 @@ Text("Fixed width")
 // Maximum sizes
 VStack {
     Text("Full width")
-        .maxWidth()
+        .greedyWidth()
     
     Spacer()
     
     Text("Full frame")
-        .maxFrame()
+        .greedyFrame()
 }
 ```
 
@@ -107,6 +107,18 @@ Text("Horizontal padding")
 
 Text("Custom vertical padding")
     .verticalPadding(20)
+    
+Text("Custom leading Padding")
+    .leadingPadding(12)
+
+Text("Custom trailing Padding")
+    .trailingPadding(12)
+
+Text("Custom top Padding")
+    .topPadding(12)
+
+Text("Custom bottom Padding")
+    .bottomPadding(12)
 ```
 
 #### Conditional Modifiers
@@ -275,6 +287,37 @@ let chunks = numbers.chunked(into: 3)
 let duplicates = [1, 2, 2, 3, 3, 3, 4]
 let unique = duplicates.removeDuplicates()
 // [1, 2, 3, 4]
+```
+### Optional Extensions
+
+
+
+```swift
+let name: String? = nil
+print(name.isNil)   // true
+print(name.isSome)  // false
+
+let username: String? = nil
+let displayName = username.or("Guest")
+print(displayName) // Guest
+
+let score: Int? = 42
+score.ifSome { value in
+    print("Score is \(value)")
+}
+// Output: Score is 42
+
+let data: Data? = nil
+data.ifNil {
+    print("No data available.")
+}
+// Output: No data available.
+
+let email: String? = "user@example.com"
+
+let result = email.then({ "Email: \($0)" }, else: "No email provided")
+print(result)
+// Output: Email: user@example.com
 ```
 ---
 # Spider

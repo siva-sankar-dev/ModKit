@@ -1,5 +1,5 @@
 //
-//  Array+ExtentionTests.swift
+//  Array+ExtensionTests.swift
 //  ModKit
 //
 //  Created by Siva Sankar on 17/05/25.
@@ -9,7 +9,7 @@ import ModKit
 import Testing
 
 @Suite("Array Extention Tests")
-struct ArrayExtentionTests {
+struct ArrayExtensionTests {
 
     //MARK: - isNotEmpty Tests
     @Test(

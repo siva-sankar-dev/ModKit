@@ -1,5 +1,5 @@
 //
-//  String+ExtentionTest.swift
+//  String+ExtensionTest.swift
 //  ModKit
 //
 //  Created by Siva Sankar on 17/05/25.

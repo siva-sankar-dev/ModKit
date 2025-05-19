@@ -1,5 +1,5 @@
 //
-//  Int+ExtentionTests.swift
+//  Int+ExtensionTests.swift
 //  ModKit
 //
 //  Created by Siva Sankar on 17/05/25.
